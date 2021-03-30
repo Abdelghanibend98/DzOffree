@@ -40,28 +40,7 @@ public class DzOffreeApplication implements CommandLineRunner{
 		
 	
 	    
-//		UserMetier userMetier = ctx.getBean(UserMetier.class); 
-//		userMetier.inscrire(new User("abgh.bend98@gmail.com", "ghani1998", "benyamina","abdelghani", new Date(), "0656205685", "vffvr", "svefvr"));
-//		userMetier.inscrire(new User("bens.moh@gmail.com", "moh1997", "bensouna","mohamed", new Date(), "0656205685", "vffvr", "svefvr"));
-     
-//		Page<Client> pg = clientMetier.listClients(0, 5);
-//		for (Client client : pg.getContent()) {
-//			System.out.println(client.getPrenom());
-//		}
-//		AnnonceMetier annonceMetier = ctx.getBean(AnnonceMetier.class);
-//	    Page<Attribution> pg= annonceMetier.chercherAttribution("%r%", "Bâtiment et Génie civil",0, 4);
-//	    for (Attribution apOffre : pg.getContent()) {
-//	    	
-//	    	System.out.println(apOffre.getCtg());
-//			System.out.println(apOffre.getParution());
-//			System.out.println(apOffre.getObjet());
-//			System.out.println(apOffre.getType());
-//			System.out.println(apOffre.getRef());
-//			System.out.println("_______________");
-//		}
-//		
-	 
-//	  annonceMetier.updateAppOffre("http://www.algeriatenders.com/annulations.php");
+
 	}
 	@Bean
     public Executor taskExecutor() {
