@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>Insert title here</title>
+</head>
+<body>
+  <div class="d-flex align-items-center section-aquamarine py-5 cover" style="	background-image: url(&quot;assets/conference/cover.jpg&quot;);	height: 400px;	background-position: top left;	background-size: 100%;	background-repeat: repeat;"
+       th:fragment="section" th:if="${home}">
+       
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-white mt-5">
+          <h1 class="display-2 d-none d-md-block">DzOffre</h1>
+          <a th:href="@{/espaceclient}" class="btn btn-lg mt-4 btn-outline-light">Inscrivez-vous<br/></a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Register -->
+  </div>
+    <div style="	background-image: url(&quot;assets/conference/cover.jpg&quot;);	background-position: top left;	background-size: 100%;	background-repeat: repeat;" class="d-flex align-items-center section-aquamarine py-5 cover"
+          th:fragment="section" th:if="${insc}">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-md-5 p-4">
+          <h3>Bienvennue</h3>
+          <p>N'hésitez pas à nous contacter</p>
+          <p class="lead mt-3"> <b>Support</b> </p>
+          <p class="text-dark"> <a href="#" class="text-dark">+1 234 567 89</a> </p>
+          <p> <a href="#" class="text-dark">support@hello.com</a> </p>
+          <p class="lead mt-3"> <b>Sales</b> </p>
+          <p> <a href="#" class="text-dark">+1 234 567 89</a> </p>
+          <p class="text-dark"> <a href="#" class="text-dark">sales@hello.com</a> </p>
+          <p class="lead mt-3"> <b>General</b> </p>
+          <p> <a href="#" class="text-dark">info@hello.com</a> </p>
+        </div>
+        <div class="col-md-7 p-4">
+          <h3 class="mb-3">Inscrivez-vous</h3>
+          <form th:action="@{/registration}" method="post" th:object="${user}">
+            <div class="form-row">
+              <div class="form-group col-md-6"> <input required="required" type="text" class="form-control" id="form36" placeholder="Nom" name="nom" pattern="[A-Za-z]+"/></div>
+              <div class="form-group col-md-6"> <input required="required" type="text" class="form-control" id="form37" placeholder="Prenom" name="prenom" pattern="[A-Za-z]+"/></div>
+            </div>           
+            <div class="form-row">
+              <div class="form-group col-md-6"> <input required="required" type="text" class="form-control" id="form36" placeholder="Entreprise" name="entreprise"/></div>
+              <div class="form-group col-md-6">
+                <div class="form-group"><select required="required" class="custom-select" name="ctg">
+                  <option value="" selected="selected">Choisissez une catégorie</option>
+                  <option>Informatique et Bureautique</option>
+                  <option>Aéronautique</option>
+                  <option>Agriculture, Elevage, Forêts et Pêche</option>
+                  <option>Agro alimentaire</option>
+                  <option>Ameublement et Mobilier</option>
+                  <option>Architecture et Urbanisme</option>
+                  <option>Assurance et Banque</option>
+                  <option>Bâtiment et Génie civil</option>
+                  <option>Chimie, Pétrochimie, Energie et Service pétrolier</option>
+                  <option>Equipement industriel, Outillage et Pièce détachée</option>
+                  <option>Restauration, Hôtellerie, Equipement pour les collectivités et villes</option>
+                  <option>Etudes, Consulting, Formation et Certification</option>
+                  <option>Hydraulique et Environnement</option>
+                  <option>Immobilier</option>
+                  <option>Impression, Edition et Communication</option>
+                  <option>Industrie de la cellulose, Papier, Carton et Emballage</option>
+                  <option>Industrie manufacturière</option>
+                  <option>Industrie sidérurgique, Métallurgique et Mécanique</option>
+                  <option>Informatique et Bureautique</option>
+                  <option>Médical et Paramédical</option>
+                  <option>Mine, Cimenterie, Agrégat et Granulat</option>
+                  <option>Pharmacie et Parapharmacie</option>
+                  <option>Port et Aéroport</option>
+                  <option>Sécurité et HSE</option>
+                  <option>Service</option>
+                  <option>Sport et Loisirs</option>
+                  <option>Equipement scientifique et Laboratoire</option>
+                  <option>Télécommunication</option>
+                  <option>Transport</option>
+                  <option>Travaux publics</option>
+                  <option>Industrie électronique et Matériel audio-visuel</option>
+                  <option>Autre</option>
+                  </select>
+                 </div>
+              </div>
+            </div>
+            <div class="form-group"> <input  required="required" type="email" class="form-control" id="form39" placeholder="mail@exemple.com" name="mail"/> 
+            <div class="form-group bg-danger" th:if="${testeinsc}"><label class="text-warning">Cette adresse e-mail est déja utilisée, veuillez utiliser une autre adresse SVP !</label></div>
+            </div>           
+            <div class="form-row">
+              <div class="form-group col-md-6"> <input  type="password" class="form-control" id="password" placeholder="Mot de passe" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" autofocus="autofocus" required="required" title="SVP ! utilisez l'alphabet majiscule , miniscule et les chiffres de cette format MAJ / MIN / ch"/></div>
+              <div class="form-group col-md-6"> <input required="required" type="password" oninput="check(this)" class="form-control" id="form37" placeholder="Confirmer le mot de passe" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"/> </div>
+            </div>
+            <div class="form-group"><input required="required" autofocus="autofocus" type="date" class="form-control" id="date" name="date_naissance" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" max="2001-12-31" min="1940-12-31"/></div>
+            <div class="form-group"> <input required="required" type="tel" class="form-control" id="form42" placeholder="Numéro de telephone" name="telephone" pattern = '[0-9]{10}' maxlength="10"/> </div>
+            <button type="submit" class="btn btn-primary">Inscrire</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+  <div class="myForm">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="ModalConfirme">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                 <div class="modal-header bg-primary">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation d'adresse E-mail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                    </button>
+                 </div>
+                 <div class="modal-body text-dark ">
+                     <strong>Vueillez envoyer un code de confirmation à votre adresse mail pour terminer l'inscription. SVP !</strong>
+                 </div>
+                 <div class="col-12">
+                     <p class="text-danger" th:if="${MailError}" id="p-er">Cette adresse mail n'existe pas !!</p>                                  
+                 </div>                 
+                 <div class="modal-footer">
+                     <a class="btn btn-primary" th:href="@{/CodeConfirme}">Envoyer</a>
+                     <a class="btn btn-danger" th:href="@{/TermineInsc}">Passer</a>                    
+                 </div>
+                </div>
+            </div>
+        </div>
+</div>
+  
+  
+  
+   
+   
+  </div>
+  
+  
+
+
+                   
+ 
+                      <!-- Modal Confirmation Mail -->
+
+<div style="background-image: url(&quot;assets/conference/cover.jpg&quot;); background-position: left top; background-size: 100%; background-repeat: repeat;" class="d-flex align-items-center section-aquamarine py-5 cover"
+        th:fragment="section" th:if="${Code}">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="mb-3">Message</h1>
+          <p>Confirmer votre Adresse mail pour terminer l'inscription !</p><a th:href="@{/CodeConfirme}" class="btn border border-light btn-danger mx-2">Confirmer</a>
+        </div>
+      </div>
+    </div>
+
+
+ <div class="myForm">
+    <form th:action="@{/TermineConf}" method="post">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="ModalC">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Code de confirmation</h5>
+                    </div>
+                 <div class="modal-body">
+                  <div class="form-group row"> <label for="CodeConf" class="col-5 col-form-label text-dark">Code de confirmation :</label>
+                     <div class="col-7">
+                        <input required="required" type="text" class="form-control" id="CodeConf" name="CodeConf" placeholder="Entrez votre code de Confirmation"/> </div>
+                     </div>
+                     <div class="col-12">
+                        <p class="text-danger" th:if="${CodeErreur}" id="p-er">Code Incorrect, recever vous un autre code dans votre mail !</p>                                  
+                     </div>
+                  </div>
+                    <div class="modal-footer">
+                       <button type="submit" class="btn btn-primary">Valider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>               
+</div>
+
+
+
+
+
+                           <!--  Success Registration -->  
+  
+   <div style="background-image: url(&quot;assets/conference/cover.jpg&quot;); background-position: left top; background-size: 100%; background-repeat: repeat;" class="d-flex align-items-center section-aquamarine py-5 cover"
+        th:fragment="section" th:if="${succ}">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="mb-3">Succée !!</h1>
+          <p>Vous avez inscri en succé, veuillez authentifier pour accéder à votre compte</p><a class="btn border border-light btn-primary mx-2" data-toggle="modal" data-target="#Login">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+     <div style="background-image: url(&quot;assets/conference/cover.jpg&quot;); background-position: left top; background-size: 100%; background-repeat: repeat;" class="d-flex align-items-center section-aquamarine py-5 cover"
+        th:fragment="section" th:if="${succPasse}">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="mb-3">Succée !!</h1>
+          <p>Votre Mot de passe a été reinitialisé</p><a class="btn border border-light btn-primary mx-2" data-toggle="modal" data-target="#Login">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

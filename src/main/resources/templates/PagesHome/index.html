@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- PAGE settings -->
+  <link rel="icon" href="/img/logo.png"/>
+  <title>DzOffre | Accueil</title>
+  <meta name="description" content="DzOffre application pour les appels d'offre en Algerie"/>
+  <meta name="keywords" content="Toutes les marchées en Algerie"/>
+  <!-- CSS dependencies -->
+  <link rel="stylesheet" href="aquamarine.css"/>
+  <link rel="icon" href="https://templates.pingendo.com/assets/Pingendo_favicon.ico"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css"/>
+  <link rel="stylesheet" type="text/css" th:href="@{style.css}"/>
+</head>
+
+<body class="text-center" style="	height: 200px;">
+  <!-- Navbar -->
+  <!-- Cover -->
+  
+  <div class="d-flex align-items-center section-aquamarine py-5 cover" style="	background-image: url(&quot;assets/conference/cover.jpg&quot;);	height: 400px;	background-position: top left;	background-size: 100%;	background-repeat: repeat;"
+       th:replace="PagesHome/layout :: section">
+  </div>
+  <nav class="navbar navbar-expand-md fixed-top bg-primary navbar-light">
+    <div class="container">
+      <div class="collapse navbar-collapse justify-content-center" id="navbar2SupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item mx-2">
+            <a class="nav-link" th:href="@{/home}">Accueil</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#services">Services</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#team">Qui somme-nous ?<br/></a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#footer">Contact<br/></a></li>
+        </ul>
+        <a class="btn navbar-btn mx-2 btn-outline-danger text-white" th:href="@{/espaceclient}">Inscrivez-vous</a>
+        <a class="btn navbar-btn mx-2 text-white btn-outline-success" data-toggle="modal" data-target="#Login">Se connecter<br/></a>
+      </div>
+    </div>
+  </nav>
+
+
+
+ <div class="myForm">
+    <form th:action="@{/home}" method="post">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="Login">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Espace Privé</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                 <div class="modal-body">
+                  <div class="form-group row">
+                     <div class="col-8">
+                       <p class="red" th:if="${param.error}" id="p-er">e-mail ou mot de passe incorrect !</p>
+                     </div>
+                  </div>                                   
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-4 col-form-label">Adresse mail</label>
+                     <div class="col-8">
+                       <input required="required" type="email" class="form-control" id="inputmailh" name="username" placeholder="mail@exemple.com"/>
+                     </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-4 col-form-label">Mot de passe</label>
+                     <div class="col-8">
+                       <input required="required"  type="password" class="form-control" id="inputpasswordh" name="password" placeholder="Mot de passe"/> 
+                     </div>
+                  </div>
+                 </div>
+                    <div class="modal-footer">
+                       <a th:href="@{/sendmail}" class="oublie" data-toggle="modal" data-target="#passOublié">Mot de passe oublié ?</a>              
+                      <button type="submit" class="btn btn-primary">Se connecter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>               
+  
+ <div class="myForm">
+    <form th:action="@{/EnvoyerMail}" method="post">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="passOublié">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Mot de passe oublié</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                 <div class="modal-body">
+                  <div class="form-group row">
+                     <div class="col-12">
+                       <p class="text-dark">Si vous avez l'accé à votre adresse mail, envoyez un code de confirmation pour reinitialiser votre mot de passe  </p>
+                     </div>
+                  </div>                                                    
+                  <div class="form-group row"><label for="mail" class="col-4 col-form-label">Adresse mail</label>
+                     <div class="col-8">
+                       <input class="form-control" type="email" name="mail" id="mail" placeholder="exemple@mail.com" required="required" autofocus="autofocus"/>
+                     </div>
+                  </div>  
+                  <div class="form-group row" th:if="${CodeErreurPasse}">
+                     <div class="col-12">
+                       <p class="text-danger">Le Code que vous avez saisi est incorrecte</p>
+                     </div>
+                  </div>                  
+                  <div class="form-group row" th:if="${MailError}">
+                     <div class="col-12">
+                       <p class="text-danger">Cette adresse mail n'existe pas!</p>
+                     </div>
+                  </div>                                 
+                 </div>
+                    <div class="modal-footer">              
+                      <button type="submit" class="btn btn-primary">Envouyer</button>
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#passOublié">Annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>               
+ 
+ <div class="myForm">
+    <form th:action="@{/ReinitialisePasse}" method="post">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="ModalReinitialisePass">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Reinitialisation de Mot de passe</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                 <div class="modal-body">
+                  <div class="form-group row"> <label for="MailCode" class="col-5 col-form-label text-dark">Code de confirmation :</label>
+                     <div class="col-7">
+                        <input required="required" autofocus="autofocus" type="text" class="form-control" id="MailCode" name="MailCode" placeholder="Entrez votre code de Confirmation"/> </div>
+                   </div>
+                  <div class="form-group row"> <label for="CodeConf" class="col-5 col-form-label text-dark">Nouveau mot de passe</label>
+                     <div class="col-7">
+                        <input pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"  required="required" autofocus="autofocus" type="password" class="form-control" id="password" name="password" placeholder="Nouveau mot de passe"/> </div>
+                   </div>
+                  <div class="form-group row"> <label for="CodeConf" class="col-5 col-form-label text-dark">Confirmation nouveau mot de passe</label>
+                     <div class="col-7">
+                        <input required="required" autofocus="autofocus" type="password" oninput="check(this)" class="form-control" id="ConfNouvPass" name="ConfNouvPass" placeholder="Confirmer votre mot de passe"/> </div>
+                   </div>
+                  </div>
+                    <div class="modal-footer">
+                       <button type="submit" class="btn btn-primary">Valider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>               
+ 
+ 
+ 
+
+
+ 
+   <section class="page-section py-5 bg-light" id="services">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Services</h2>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col-md-4">
+        <a class="btn" data-toggle="modal" data-target="#Login">
+          <span class="fa-stack fa-4x">
+            <i class="fa fa-circle fa-stack-2x text-primary"></i>
+            <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
+          </span>
+        </a>
+          <h4 class="service-heading">Appel d'offre</h4>
+          <p class="text-muted">Un appel d'offres est une procédure par laquelle un acheteur potentiel demande à différents offreurs de faire une proposition commerciale chiffrée en réponse à la formulation détaillée (cahier des charges) de son besoin de produit, service ou prestation.</p>
+        </div>       
+        <div class="col-md-4">
+        <a class="btn" data-toggle="modal" data-target="#Login">
+          <span class="fa-stack fa-4x">
+            <i class="fa fa-circle fa-stack-2x text-primary"></i>
+            <i class="fa fa-send fa-stack-1x fa-inverse"></i>
+          </span>
+        </a>
+          <h4 class="service-heading">Avis d'attribution</h4>
+          <p class="text-muted">est un document d'information publié par le pouvoir adjudicateur ou l'entité adjudicatrice dans la même publication que celle choisie pour l'avis d'appel public à la concurrence, dans les 30 jours suivant la notification du marché.</p>
+        </div>
+        <div class="col-md-4">
+        <a class="btn" data-toggle="modal" data-target="#Login">
+          <span class="fa-stack fa-4x">
+            <i class="fa fa-circle fa-stack-2x text-primary"></i>
+            <i class="fa fa-lock fa-stack-1x fa-inverse"></i>
+          </span>
+        </a>
+          <h4 class="service-heading">Avis d'annulation</h4>
+          <p class="text-muted">Un avis d'annulation est une procédure par laquelle on annonce une annulation d'un appel d'offre publié auparavant</p>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+ 
+   <section class="page-section py-5" id="team" style="background: gray;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-2 text-center">
+          <h2 class="section-heading text-uppercase">Qui Somme nous?</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="team-member">
+            <img class="w-50 rounded-circle" src="img/ghani.jpg"/>
+            <h4 class="py-2">BENYAMINA-DOUMA abdelghani</h4>
+            <p class="text-light">UHBC FSEI 2019</p>
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                 <i class="fa fa-facebook-square text-light fa-3x m-2"></i>
+                 
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-3x fa-instagram text-light m-2"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-3x text-light fa-pinterest-p m-2"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="team-member">
+            <img class="w-50 rounded-circle" src="img/bens.jpg"/>
+            <h4 class="py-2">BENSOUNA mohammed</h4>
+            <p class="text-light">UHBC FSEI 2019</p>
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                 <i class="fa fa-facebook-square text-light fa-3x m-2"></i>
+                 
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-3x fa-instagram text-light m-2"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-3x text-light fa-pinterest-p m-2"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <p class="large text-light">Nous soumme un groupe des étudiants en troisième année licence informatique</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+ 
+ 
+ 
+ 
+  <footer class="text-md-left text-center p-4 bg-dark text-light">
+    <div class="container">
+      <div class="row">
+        <div class="my-3 col-lg-4 col-md-5">
+          <h3>DzOffre</h3>
+          <p class="my-3">129 Didouche Morad Alger,Algeri</p>
+          <a class="btn btn-lg btn-primary" th:href="@{/espaceclient}">Inscrivez-vous<br/></a>
+        </div>
+        <div class="my-3 col-lg-4 col-md-7" id="footer">
+          <h3>N'hisitez pas à nous contacter</h3>
+          <form th:action="@{/sendmail}" method="get">
+          <p>tel : <a href="#">0656205685<br/></a></p>
+          <p>fax : <a href="#">0697981985<br/></a></p>
+          <p>mail : <a href="#">dz.offre@gmail.com<br/></a></p>
+          </form>
+        </div>
+        <div class="col-lg-1"> </div>
+        <div class="my-3 col-lg-3">
+          <h3>Suivez-nous sur :<br/></h3>
+          <a href="https://www.facebook.com" target="blank"><i class="fa fa-facebook-square text-muted fa-3x m-2"></i></a>
+          <a href="https://www.instagram.com" target="blank"><i class="fa fa-3x fa-instagram text-muted m-2"></i></a>
+          <a href="https://twitter.com" target="blank"><i class="fa fa-3x fa-twitter m-2 text-muted"></i></a>
+          <a href="https://plus.google.com" target="blank"><i class="fa fa-3x fa-google-plus-official text-muted m-2"></i></a>
+          <a href="https://pinterest.com" target="blank"><i class="fa fa-3x text-muted fa-pinterest-p m-2"></i></a>
+          <a href="https://www.youtube.com" target="blank"><i class="fa fa-3x text-muted fa-youtube-play m-2"></i></a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <p class="text-muted">© Copyright DzOffre 2019 /  Bend - Bens / UHBC<br/></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Script: Make my navbar transparent when the document is scrolled to top -->
+  <script src="js/navbar-ontop.js"></script>
+  <!-- Script: Animated entrance -->
+  <script src="js/animate-in.js"></script>
+  <!-- JavaScript dependencies -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script src="js/smooth-scroll.js" style=""></script> 
+    <script type='text/javascript'>
+    function check(input) {
+        if (input.value != document.getElementById('password').value) {
+            input.setCustomValidity('Mot de passe n`est pas identique ! ');
+        } else {
+           
+            input.setCustomValidity('');
+        }
+    }
+  </script>
+  
+  <script type='text/javascript' th:if="${mailConf}">
+     $( document ).ready(function() {
+	    $('#ModalConfirme').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+	});
+  </script>
+  
+  <script type='text/javascript' th:if="${Code}">
+     $( document ).ready(function() {
+	    $('.myForm #ModalC').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+	});
+  </script>
+    <script type='text/javascript' th:if="${CodeErreurPasse}">
+     $( document ).ready(function() {
+	    $('.myForm #passOublié').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+	});
+  </script>
+  <script type='text/javascript' th:if="${MailCode}">
+     $( document ).ready(function() {
+	    $('.myForm #ModalReinitialisePass').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+	});
+  </script> 
+  <script type='text/javascript' th:if="${MailError}">
+     $( document ).ready(function() {
+	    $('.myForm #passOublié').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+	});
+  </script>  
+  <script type='text/javascript' th:if="${MailError}">
+     $( document ).ready(function() {
+	    $('.myForm #ModalC').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+	});
+  </script>  
+<script type='text/javascript' th:if="${param.error}">
+  $( document ).ready(function() {
+	    $('#Login').modal('toggle')
+	});
+ </script>  
+</body>
+</html>

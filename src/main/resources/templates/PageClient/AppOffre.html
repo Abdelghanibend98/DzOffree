@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8"/>
+
+
+
+</head>
+<body>
+
+
+
+<!--     Le Tableau des appels d'offres / dzOffre / Bend Bens UHBC 2019 .    -->
+
+
+
+<div class="py-5" style="" th:fragment="section" th:if="${appoffre}">
+    <div class="container py-1">
+
+
+           <!--     Menu / dzOffre / Bend Bens UHBC 2019 .    -->
+
+    
+      <div class="row border-primary border-bottom pb-1">
+        <div class="col-md-10">
+          <ul class="nav nav-pills">
+            <li class="nav-item"> <a th:href="@{/compte/listeappoffres}" class="active nav-link">Appels d'offres</a> </li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/compte/listeappoffres/attribution}">Avis d'attribution</a> </li>
+            <li class="nav-item"> <a th:href="@{/compte/listeappoffres/annulation}" class="nav-link">Avis d'annulation</a> </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container border-primary py-2" th:if="${appoffre}">
+      <div class="row border-bottom border-primary">
+        <div class="border-primary">
+          <h5 class="text-primary" th:text="${catg}"></h5>
+        </div>
+      </div>
+    </div>
+    <div class="container" th:if="${appoffre}">
+      <div class="row">
+        <div class="col-md-2 pr-4" style="">
+          <ul class="pagination" th:if="${totale}">
+            <li class="page-item" th:if="${test}"> <a class="page-link" th:href="@{/compte/listeappoffres(numpage=${pr},catg=${catg},rech=${rech})}"> <span>«</span></a> </li>
+            <li class="page-item active"> <a class="page-link" th:text="${numpage}" th:href="@{/compte/listeappoffres(numpage=${numpage},catg=${catg},rech=${rech})}">1</a> </li>
+            <li class="page-item" th:if="${test1}"> <a th:text="${numpage+1}" class="page-link" th:href="@{/compte/listeappoffres(numpage=${sui},catg=${catg},rech=${rech})}"></a> </li>
+            <li class="page-item" th:if="${test1}"> <a class="page-link" th:href="@{/compte/listeappoffres(numpage=${sui},catg=${catg},rech=${rech})}"> <span>»</span></a> </li>
+          </ul>
+        </div>
+        <div class="w-60" style="">
+          <form class="form-inline row" th:action="@{/compte/listeappoffres}" method="get">
+            <div class="form-group row">
+              <div class="pl-4">
+               <select class="custom-select w-50" name="catg">
+                  <option th:text="${catg}"></option>
+                  <option>Aéronautique</option>
+                  <option>Agriculture, Elevage, Forêts et Pêche</option>
+                  <option>Agro alimentaire</option>
+                  <option>Ameublement et Mobilier</option>
+                  <option>Architecture et Urbanisme</option>
+                  <option>Assurance et Banque</option>
+                  <option>Bâtiment et Génie civil</option>
+                  <option>Chimie, Pétrochimie, Energie et Service pétrolier</option>
+                  <option>Equipement industriel, Outillage et Pièce détachée</option>
+                  <option>Restauration, Hôtellerie, Equipement pour les collectivités et villes</option>
+                  <option>Etudes, Consulting, Formation et Certification</option>
+                  <option>Hydraulique et Environnement</option>
+                  <option>Immobilier</option>
+                  <option>Impression, Edition et Communication</option>
+                  <option>Industrie de la cellulose, Papier, Carton et Emballage</option>
+                  <option>Industrie manufacturière</option>
+                  <option>Industrie sidérurgique, Métallurgique et Mécanique</option>
+                  <option>Informatique et Bureautique</option>
+                  <option>Médical et Paramédical</option>
+                  <option>Mine, Cimenterie, Agrégat et Granulat</option>
+                  <option>Pharmacie et Parapharmacie</option>
+                  <option>Port et Aéroport</option>
+                  <option>Sécurité et HSE</option>
+                  <option>Service</option>
+                  <option>Sport et Loisirs</option>
+                  <option>Equipement scientifique et Laboratoire</option>
+                  <option>Télécommunication</option>
+                  <option>Transport</option>
+                  <option>Travaux publics</option>
+                  <option>Industrie électronique et Matériel audio-visuel</option>
+                  <option>Autre</option>
+                </select>
+               </div>
+            </div>
+            <div class="input-group">
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Recherche par description ..." style="" name="rech"/>
+              <div class="input-group-append"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  <div class="container" th:if="${totale}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table id="table" class="table table-striped table-borderless">
+              <thead>
+                <tr>
+                  <th>Etat</th>
+                  <th scope="col">Ref</th>
+                  <th scope="col">Parution</th>
+                  <th scope="col">Catégorie</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Echeance</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="c:${appoffre}">
+                  <td>
+                  <span class="badge badge-primary" th:if="${(c.ett == true)}"> Ouvert</span>
+                  <span class="badge badge-danger" th:if="${(c.ett == false)}"> Fermer</span>
+                  </td>
+                  <td th:text="${c.ref}"></td>
+                  <td th:text="${c.date_ajout}"></td>
+                  <td th:text="${c.ctg}"></td>
+                  <td th:text="${c.type}"></td>
+                  <td th:text="${c.description}"></td>
+                  <td th:text="${c.echeance}"></td>
+                  <td>
+                  <a th:href="@{/findoneApp(id=${c.ref})}"  class="btn btn-primary eBtn">Consulter</a>       
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+   </div> 
+   
+   
+<!-- Model de consultation des appels d'offres / dzOffre / Bend Bens UHBC 2019 .    -->
+   
+   
+   <div class="myForm">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="ModalApp">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">DzOffre</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row"><h3 class="col-7">Appel d'offre de Ref : </h3>
+                          <div>
+                            <h4 id="id" class="border-bottom"></h4>
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="date" class="col-3 col-form-label">Date d'ajout : </label>
+                          <div class="col-9">
+                            <strong   id="date"></strong>                          
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="echeance" class="col-3 col-form-label">Echeance</label>
+                          <div class="col-9">
+                          <strong id="echeance"></strong>
+                          </div>
+                        </div>                        
+                        <div class="form-group row border-bottom"><label for="ctg" class="col-3 col-form-label">Catégorie </label>
+                          <div class="col-9">
+                            <strong id="ctg"></strong>
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="type" class="col-3 col-form-label">Type</label>
+                          <div class="col-9">
+                            <strong id="type"></strong>
+                          </div>
+                        </div>
+                        <div class="form-group row"><label for="desc" class="col-3 col-form-label">Description</label>
+                          <div class="col-9"> 
+                            <strong id="desc"></strong>             
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>   
+  
+<!--       Pagination de Tableau des appels d'offres / dzOffre / Bend Bens UHBC 2019 .    -->
+              
+  <div class="col-md-5" style="">
+     <ul class="pagination" th:if="${totale}">
+        <li class="page-item" th:if="${test}"> <a class="page-link" th:href="@{/compte/listeappoffres(numpage=${pr},catg=${catg},rech=${rech})}"> <span>«</span></a> </li>
+        <li class="page-item active"> <a class="page-link" th:text="${numpage}" th:href="@{/compte/listeappoffres(numpage=${numpage},catg=${catg},rech=${rech})}">1</a> </li>
+        <li class="page-item" th:if="${test1}"> <a th:text="${numpage+1}" class="page-link" th:href="@{/compte/listeappoffres(numpage=${sui},catg=${catg},rech=${rech})}"></a> </li>
+        <li class="page-item" th:if="${test1}"> <a class="page-link" th:href="@{/compte/listeappoffres(numpage=${sui},catg=${catg},rech=${rech})}"> <span>»</span></a> </li>
+     </ul>
+  </div>
+ </div> 
+ 
+<!--     aucun résultat trouvé / dzOffre / Bend Bens UHBC 2019 .    -->
+ 
+ <div class="container pt-2" th:if="${(totale == null)}">
+    <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-primary" role="alert" >
+            <h4 class="alert-heading">Alerte !!</h4>
+            <p class="mb-0">Il y a pas de résultat</p>
+          </div>
+        </div>
+      </div>   
+    </div>  
+</div>
+ 
+ 
+<!--     Le Tableau des avis d'attribution / dzOffre / Bend Bens UHBC 2019 .    -->
+ 
+ 
+<div class="py-5" style="" th:fragment="section" th:if="${attribution}">
+ 
+          <!--     Menu / dzOffre / Bend Bens UHBC 2019 .    -->
+         
+    <div class="container">
+      <div class="row border-primary border-bottom pb-1">
+        <div class="col-md-12">
+          <ul class="nav nav-pills">
+            <li class="nav-item"> <a th:href="@{/compte/listeappoffres}" class="nav-link">Appels d'offres</a> </li>
+            <li class="nav-item"> <a class="active nav-link" th:href="@{/compte/listeappoffres/attribution}">Avis d'attribution</a> </li>
+            <li class="nav-item"> <a th:href="@{/compte/listeappoffres/annulation}" class="nav-link">Avis d'annulation</a> </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+       <div class="container border-primary py-2" th:if="${attribution}">
+      <div class="row border-bottom border-primary">
+        <div class="border-primary">
+          <h5 class="text-primary" th:text="${catg}"></h5>
+        </div>
+      </div>
+    </div>
+    <div class="container" th:if="${attribution}">
+      <div class="row">
+        <div class="col-md-2" style="">
+          <ul class="pagination" th:if="${totale}">
+            <li class="page-item" th:if="${test}"> <a class="page-link" th:href="@{/compte/listeappoffres/attribution(numpage=${pr},catg=${catg},rech=${rech})}"> <span>«</span></a> </li>
+            <li class="page-item active"> <a class="page-link" th:text="${numpage}" th:href="@{/compte/listeappoffres/attribution(numpage=${numpage},catg=${catg},rech=${rech})}">1</a> </li>
+            <li class="page-item" th:if="${test1}"> <a th:text="${numpage+1}" class="page-link" th:href="@{/compte/listeappoffres/attribution(numpage=${sui},catg=${catg},rech=${rech})}"></a> </li>
+            <li class="page-item" th:if="${test1}"> <a class="page-link" th:href="@{/compte/listeappoffres/attribution(numpage=${sui},catg=${catg},rech=${rech})}"> <span>»</span></a> </li>
+          </ul>
+        </div>
+        <div class="w-60" style="">
+          <form class="form-inline row" th:action="@{/compte/listeappoffres/attribution}" method="get">
+            <div class="form-group row">
+              <div class="">
+               <select class="custom-select w-50" name="catg">
+                  <option th:text="${catg}"></option>
+                  <option>Aéronautique</option>
+                  <option>Agriculture, Elevage, Forêts et Pêche</option>
+                  <option>Agro alimentaire</option>
+                  <option>Ameublement et Mobilier</option>
+                  <option>Architecture et Urbanisme</option>
+                  <option>Assurance et Banque</option>
+                  <option>Bâtiment et Génie civil</option>
+                  <option>Chimie, Pétrochimie, Energie et Service pétrolier</option>
+                  <option>Equipement industriel, Outillage et Pièce détachée</option>
+                  <option>Restauration, Hôtellerie, Equipement pour les collectivités et villes</option>
+                  <option>Etudes, Consulting, Formation et Certification</option>
+                  <option>Hydraulique et Environnement</option>
+                  <option>Immobilier</option>
+                  <option>Impression, Edition et Communication</option>
+                  <option>Industrie de la cellulose, Papier, Carton et Emballage</option>
+                  <option>Industrie manufacturière</option>
+                  <option>Industrie sidérurgique, Métallurgique et Mécanique</option>
+                  <option>Informatique et Bureautique</option>
+                  <option>Médical et Paramédical</option>
+                  <option>Mine, Cimenterie, Agrégat et Granulat</option>
+                  <option>Pharmacie et Parapharmacie</option>
+                  <option>Port et Aéroport</option>
+                  <option>Sécurité et HSE</option>
+                  <option>Service</option>
+                  <option>Sport et Loisirs</option>
+                  <option>Equipement scientifique et Laboratoire</option>
+                  <option>Télécommunication</option>
+                  <option>Transport</option>
+                  <option>Travaux publics</option>
+                  <option>Industrie électronique et Matériel audio-visuel</option>
+                  <option>Autre</option>
+                </select>
+               </div>
+            </div>
+            <div class="input-group ">
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Recherche par description ..." style="" name="rech"/>
+              <div class="input-group-append"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="container" th:if="${totale}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table table-striped table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col">Ref</th>
+                  <th scope="col">Parution</th>
+                  <th scope="col">Catégorie</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Description</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="c:${attribution}">
+                  <td th:text="${c.ref}"></td>
+                  <td th:text="${c.prt}"></td>
+                  <td th:text="${c.ctg}"></td>
+                  <td th:text="${c.type}"></td>
+                  <td style="max-width: 200px;">
+                   <div th:text="${c.obj}" style="overflow: hidden;
+                              -ms-text-overflow:ellipsis;
+                              -o-text-overflow:ellipsis;
+                               text-overflow:ellipsis;
+                               white-space: nowrap;
+                               width: inherit;"></div>
+
+                  </td>
+                  <td>
+                    <a th:href="@{/findoneAtt(id=${c.ref})}"  class="btn btn-primary eCtn">Consulter</a>                         
+                  </td>                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+   <div class="myForm">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="ModalAtt">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">DzOffre</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row"><h3 class="col-9">Avis d'attribution de Ref : </h3>
+                          <div>
+                            <h4 id="id" class="border-bottom"></h4>
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="date" class="col-3 col-form-label">Date d'ajout : </label>
+                          <div class="col-9">
+                            <strong  id="date"></strong>                          
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="ctg" class="col-3 col-form-label">Catégorie </label>
+                          <div class="col-9">
+                            <strong id="ctg"></strong>
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="type" class="col-3 col-form-label">Type</label>
+                          <div class="col-9">
+                            <strong id="type"></strong>
+                          </div>
+                        </div>
+                        <div class="form-group row"><label for="desc" class="col-3 col-form-label">Description</label>
+                          <div class="col-9"> 
+                            <strong id="desc"></strong>             
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>   
+
+      
+<!--     Pagination de Tableau des avis d'attributions / dzOffre / Bend Bens UHBC 2019 .    -->
+      
+      <div class="col-md-5" style="">
+          <ul class="pagination" th:if="${totale}">
+            <li class="page-item" th:if="${test}"> <a class="page-link" th:href="@{/compte/listeappoffres/attribution(numpage=${pr},catg=${catg},rech=${rech})}"> <span>«</span></a> </li>
+            <li class="page-item active"> <a class="page-link" th:text="${numpage}" th:href="@{/compte/listeappoffres/attribution(numpage=${numpage},catg=${catg},rech=${rech})}">1</a> </li>
+            <li class="page-item" th:if="${test1}"> <a th:text="${numpage+1}" class="page-link" th:href="@{/compte/listeappoffres/attribution(numpage=${sui},catg=${catg},rech=${rech})}"></a> </li>
+            <li class="page-item" th:if="${test1}"> <a class="page-link" th:href="@{/compte/listeappoffres/attribution(numpage=${sui},catg=${catg},rech=${rech})}"> <span>»</span></a> </li>
+          </ul>
+       </div>
+    </div>
+
+    
+         <!--     Aucun résultat / dzOffre / Bend Bens UHBC 2019 .    -->
+    
+    
+    <div class="container pt-2" th:if="${(totale == null)}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-primary" role="alert" >
+            <h4 class="alert-heading">Allerte !!</h4>
+            <p class="mb-0">Il y a pas de résultat</p>
+          </div>
+        </div>
+      </div>    
+    </div>  
+</div>
+
+
+
+<!--     Le Tableau des avis d'annulation / dzOffre / Bend Bens UHBC 2019 .    -->
+
+
+
+<div class="py-5" style="" th:fragment="section" th:if="${annulation}">
+
+
+              <!--     Menu / dzOffre / Bend Bens UHBC 2019 .    -->
+
+
+    <div class="container">
+      <div class="row border-primary border-bottom pb-1">
+        <div class="col-md-12">
+          <ul class="nav nav-pills">
+            <li class="nav-item"> <a th:href="@{/compte/listeappoffres}" class="nav-link">Appels d'offres</a> </li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/compte/listeappoffres/attribution}">Avis d'attribution</a> </li>
+            <li class="nav-item"> <a th:href="@{/compte/listeappoffres/annulation}" class="active nav-link">Avis d'annulation</a> </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+       <div class="container border-primary py-2" th:if="${annulation}">
+      <div class="row border-bottom border-primary">
+        <div class="border-primary">
+          <h5 class="text-primary" th:text="${catg}"></h5>
+        </div>
+      </div>
+    </div>
+    <div class="container" th:if="${annulation}">
+      <div class="row">
+        <div class="col-md-2" style="">
+          <ul class="pagination" th:if="${totale}">
+            <li class="page-item" th:if="${test}"> <a class="page-link" th:href="@{/compte/listeappoffres/annulation(numpage=${pr},catg=${catg},rech=${rech})}"> <span>«</span></a> </li>
+            <li class="page-item active"> <a class="page-link" th:text="${numpage}" th:href="@{/compte/listeappoffres/annulation(numpage=${numpage},catg=${catg},rech=${rech})}">1</a> </li>
+            <li class="page-item" th:if="${test1}"> <a th:text="${numpage+1}" class="page-link" th:href="@{/compte/listeappoffres/annulation(numpage=${sui},catg=${catg},rech=${rech})}"></a> </li>
+            <li class="page-item" th:if="${test1}"> <a class="page-link" th:href="@{/compte/listeappoffres/annulation(numpage=${sui},catg=${catg},rech=${rech})}"> <span>»</span></a> </li>
+          </ul>
+        </div>
+        <div class="w-60" style="">
+          <form class="form-inline row" th:action="@{/compte/listeappoffres/annulation}" method="get">
+            <div class="form-group row">
+              <div class="">
+               <select class="custom-select w-50" name="catg">
+                  <option th:text="${catg}"></option>
+                  <option>Aéronautique</option>
+                  <option>Agriculture, Elevage, Forêts et Pêche</option>
+                  <option>Agro alimentaire</option>
+                  <option>Ameublement et Mobilier</option>
+                  <option>Architecture et Urbanisme</option>
+                  <option>Assurance et Banque</option>
+                  <option>Bâtiment et Génie civil</option>
+                  <option>Chimie, Pétrochimie, Energie et Service pétrolier</option>
+                  <option>Equipement industriel, Outillage et Pièce détachée</option>
+                  <option>Restauration, Hôtellerie, Equipement pour les collectivités et villes</option>
+                  <option>Etudes, Consulting, Formation et Certification</option>
+                  <option>Hydraulique et Environnement</option>
+                  <option>Immobilier</option>
+                  <option>Impression, Edition et Communication</option>
+                  <option>Industrie de la cellulose, Papier, Carton et Emballage</option>
+                  <option>Industrie manufacturière</option>
+                  <option>Industrie sidérurgique, Métallurgique et Mécanique</option>
+                  <option>Informatique et Bureautique</option>
+                  <option>Médical et Paramédical</option>
+                  <option>Mine, Cimenterie, Agrégat et Granulat</option>
+                  <option>Pharmacie et Parapharmacie</option>
+                  <option>Port et Aéroport</option>
+                  <option>Sécurité et HSE</option>
+                  <option>Service</option>
+                  <option>Sport et Loisirs</option>
+                  <option>Equipement scientifique et Laboratoire</option>
+                  <option>Télécommunication</option>
+                  <option>Transport</option>
+                  <option>Travaux publics</option>
+                  <option>Industrie électronique et Matériel audio-visuel</option>
+                  <option>Autre</option>
+                </select>
+               </div>
+            </div>
+            <div class="input-group">
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Recherche par description ..." style="" name="rech"/>
+              <div class="input-group-append"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="container" th:if="${totale}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table">
+            <table class="table table-striped table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col">Ref</th>
+                  <th scope="col">Parution</th>
+                  <th scope="col">Catégorie</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Description</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="c:${annulation}">
+                  <td th:text="${c.ref}" scope="col" style="width: 10%"></td>
+                  <td th:text="${c.prt}" style="width: 20%"></td>
+                  <td th:text="${c.ctg}" style="width: 30%"></td>
+                  <td  th:text="${c.type}" style="width: 30%"></td>
+                  <td style="max-width: 200px;">
+                   <div th:text="${c.obj}" style="overflow: hidden;
+                              -ms-text-overflow:ellipsis;
+                              -o-text-overflow:ellipsis;
+                               text-overflow:ellipsis;
+                               white-space: nowrap;
+                               width: inherit;"></div>
+                  </td>
+                  <td>
+                    <a th:href="@{/findoneAnn(id=${c.ref})}"  class="btn btn-primary eDtn">Consulter</a>                         
+                  </td>                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+   <div class="myForm">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="ModalAnn">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">DzOffre</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row"><h3 class="col-9">Avis d'annualtion de Ref : </h3>
+                          <div>
+                            <h4 id="id" class="border-bottom"></h4>
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="date" class="col-3 col-form-label">Date d'ajout : </label>
+                          <div class="col-9">
+                            <strong  id="date"></strong>                          
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="ctg" class="col-3 col-form-label">Catégorie </label>
+                          <div class="col-9">
+                            <strong id="ctg"></strong>
+                          </div>
+                        </div>
+                        <div class="form-group row border-bottom"><label for="type" class="col-3 col-form-label">Type</label>
+                          <div class="col-9">
+                            <strong id="type"></strong>
+                          </div>
+                        </div>
+                        <div class="form-group row"><label for="desc" class="col-3 col-form-label">Description</label>
+                          <div class="col-9"> 
+                            <strong id="desc"></strong>             
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>   
+      
+      
+<!--  Pagination de Tableaux des utilisateurs / dzOffre / Bend Bens UHBC 2019 .    -->
+      
+      
+      <div class="col-md-5" style="">
+          <ul class="pagination" th:if="${totale}">
+            <li class="page-item" th:if="${test}"> <a class="page-link" th:href="@{/compte/listeappoffres/annulation(numpage=${pr},catg=${catg},rech=${rech})}"> <span>«</span></a> </li>
+            <li class="page-item active"> <a class="page-link" th:text="${numpage}" th:href="@{/compte/listeappoffres/annulation(numpage=${numpage},catg=${catg},rech=${rech})}">1</a> </li>
+            <li class="page-item" th:if="${test1}"> <a th:text="${numpage+1}" class="page-link" th:href="@{/compte/listeappoffres/annulation(numpage=${sui},catg=${catg},rech=${rech})}"></a> </li>
+            <li class="page-item" th:if="${test1}"> <a class="page-link" th:href="@{/compte/listeappoffres/annulation(numpage=${sui},catg=${catg},rech=${rech})}"> <span>»</span></a> </li>
+          </ul>
+       </div>
+    </div>
+    
+    
+<!--    Aucun résultat trouvé / dzOffre / Bend Bens UHBC 2019 .    -->
+    
+    
+    <div class="container pt-2" th:if="${(totale == null)}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-primary" role="alert" >
+            <h4 class="alert-heading">Allerte !!</h4>
+            <p class="mb-0">Il y a pas de résultat</p>
+          </div>
+        </div>
+      </div>    
+    </div> 
+</div>
+
+
+                            
+     <!--     Liste des utilisateurs / dzOffre / Bend Bens UHBC 2019 .    -->
+                             
+                             
+
+  <div class="py-5" style="" th:fragment="section" th:if="${cl}" sec:authorize="hasRole('ROLE_ADMIN')" >
+    
+    
+    <div class="container pt-2" th:if="${SuppSucc}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-primary" role="alert" >
+            <h4 class="alert-heading">Allerte !!</h4>
+            <p class="mb-0">Il y a pas de résultat</p>
+          </div>
+        </div>
+      </div>    
+    </div> 
+
+    
+    <div class="container border-primary py-2 col-md-10">
+      <div class="row border-bottom border-primary">
+        <div class="border-primary">
+          <h5 class="text-primary">Liste des utilisateurs</h5>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
+              
+ <!--     Pagination de Tableaux des utilisateurs / dzOffre / Bend Bens UHBC 2019 .    -->
+              
+              
+      <div class="row col-md-12">
+        <div class="col-md-8 pr-5" style="">
+          <ul class="pagination" th:if="${(totale == null)}">
+            <li class="page-item"> <a class="page-link" th:if="${test}" th:href="@{/compte/listeclient(numpage=${pr},rech=${rech})}"> <span>«</span></a> </li>
+            <li class="page-item active"> <a th:if="${totale}" class="page-link" th:href="@{/compte/listeclient(numpage=${numpage},rech=${rech})}">0</a> </li>
+            <li class="page-item"> <a class="page-link" th:if="${test1}" th:href="@{/compte/listeclient(numpage=${sui},rech=${rech})}">1</a> </li>
+            <li class="page-item"> <a class="page-link" th:if="${test1}" th:href="@{/compte/listeclient(numpage=${sui},rech=${rech})}"> <span>»</span></a> </li>
+          </ul>
+        </div>
+        <div class="col-md-4 pl-6" style="">
+          <form class="form-inline row" th:action="@{/compte/listeclient}" method="get">
+            <div class="input-group ">
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Recherche Par nom ..." style="" name="rech"/>
+              <div class="input-group-append"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="container  py-2 col-md-10">
+      <div class="row" th:if="${totale}">
+        <div>
+          <div>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Prenom</th>
+                  <th scope="col">Date de naissance</th>
+                  <th scope="col">Telephone</th>
+                  <th scope="col">E-mail</th>
+                  <th scope="col">Entreprise</th>
+                  <th scope="col">Catégorie</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="c:${cl}" th:if="${(c.mail != 'abgh.bend98@gmail.com'  and c.mail != 'bens.med0@gmail.com')}">
+                  <td th:text="${c.nom}"></td>
+                  <td th:text="${c.prenom}"></td>
+                  <td th:text="${c.date_naissance}"></td>
+                  <td th:text="${c.telephone}"></td>
+                  <td th:text="${c.mail}"></td>
+                  <td th:text="${c.entreprise}"></td>
+                  <td th:text="${c.ctg}"></td>
+                  <td>
+                    <a th:href="@{/supprimer(mail=${c.mail})}"  class="btn btn-primary eEtn">Supprimer</a>                         
+                  </td>                  
+                 </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+   <div class="myForm">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="ModalSupUser">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">DzOffre</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                          <div class="col-9">
+                            <strong>Vous êtes sure de suprimer cet utilisateur</strong>                          
+                          </div>
+                        </div>
+                    <div class="modal-footer">
+                    <a href=""  class="btn btn-primary eFtn">Oui</a>                         
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Non</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>   
+</div>
+
+
+
+      
+
+
+
+
+<!--     Pagination de Tableaux des utilisateurs / dzOffre / Bend Bens UHBC 2019 .    -->
+
+
+      <div class="col-md-5" style="" th:if="${(totale == null)}">
+          <ul class="pagination">
+            <li class="page-item"> <a class="page-link" th:if="${test}" th:href="@{/compte/listeclient(numpage=${pr},rech=${rech})}"> <span>«</span></a> </li>
+            <li class="page-item active"> <a th:if="${totale}" class="page-link" th:href="@{/compte/listeclient(numpage=${numpage},rech=${rech})}">0</a> </li>
+            <li class="page-item"> <a class="page-link" th:if="${test1}" th:href="@{/compte/listeclient(numpage=${sui},rech=${rech})}">1</a> </li>
+            <li class="page-item"> <a class="page-link" th:if="${test1}" th:href="@{/compte/listeclient(numpage=${sui},rech=${rech})}"> <span>»</span></a> </li>
+          </ul>
+      </div>     
+    </div>
+
+     
+     <!--     Aucun résultat trouvé / dzOffre / Bend Bens UHBC 2019 .    -->
+    
+    
+    <div class="container pt-2" th:if="${(totale == null)}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-primary" role="alert" >
+            <h4 class="alert-heading">Allerte !!</h4>
+            <p class="mb-0">Il y a pas de résultat</p>
+          </div>
+        </div>
+      </div>    
+    </div>  
+</div>
+</div>
+
+       
+       <!--     Profil d'utilsateur / dzOffre / Bend Bens UHBC 2019 .    -->
+
+
+  
+<div class="py-5 text-center" th:fragment="section" th:if="${user}">
+    <div class="container pt-2" th:if="${passError}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-danger" role="alert" >
+            <h4 class="alert-heading">Alerte !!</h4>
+            <p class="mb-0">Mot de passe incorrecte</p>
+          </div>
+        </div>
+      </div>   
+    </div>
+    <div class="container pt-2" th:if="${passSucc}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-primary" role="alert" >
+            <h4 class="alert-heading">Succée !!</h4>
+            <p class="mb-0">Votre mot de passe a était changé en succée</p>
+          </div>
+        </div>
+      </div>   
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group" th:object="${user}">
+            <li class="border-0 list-group-item d-flex justify-content-between align-items-center text-white list-group-item-success" style="">Information personnelle
+            <button class="btn btn-primary Mod" data-toggle="modal" data-target="#Modal4" id="Mod">Modifier</button>
+            </li>
+            <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Nom<p th:text="${user.nom}"></p></li>
+            <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Prenom<p th:text="${user.prenom}"></p></li>
+            <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Date de naissance<p th:text="${user.date_naissance}"></p></li>
+            <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Entreprise<p th:text="${user.entreprise}"></p></li>
+            <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Catégorie<p th:text="${user.ctg}"></p></li>
+            <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Telephone<p th:text="${user.telephone}"></p></li>
+            <li class="collapse list-group-item list-group-item-success" id="demo1"  style="">
+             <div class="row">
+              <div class="col-md-12">
+               <ul>
+                  <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Mail<p th:text="${user.mail}"></p></li>          
+                  <li class="collapse list-group-item list-group-item-success" id="demo2"  style="">
+                    <div class="row">
+                     <div class="col-md-12">
+                    <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label">Mail</label>
+                     <div class="col-10">
+                      <input type="email" class="form-control" id="inputpasswordh" placeholder="Nouveau Email" name="mail" th:value="${user.mail}"/>
+                       </div>
+                    </div>
+                      <button type="submit" class="btn btn-primary">Valider</button> <button type="button" class="btn btn-primary mx-4" data-toggle="collapse" data-target="#demo2">Annuler</button>                
+                    </div>    
+                   </div>
+                  </li>
+                  <li class=" border-0 list-group-item d-flex justify-content-between align-items-center">Mote de passe<p>********</p><button type="button" class="btn btn-primary Mod" data-toggle="modal" data-target="#Modal5">Modifier</button></li>
+                </ul>        
+              </div>    
+             </div>
+            </li>             
+            <li class="border-0 list-group-item d-flex justify-content-between align-items-center text-white list-group-item-success" style="">Sécurité
+            <button class="btn btn-primary" data-toggle="collapse" data-target="#demo1">Afficher</button>
+            </li>
+          </ul>
+ 
+ 
+ 
+<!--     modifier le mot de passe / dzOffre / Bend Bens UHBC 2019 .    -->
+ 
+                                                                         
+                                                                         
+                                                                          
+ <div class="myForm">
+    <form th:action="@{/modifierpass}" th:method="PUT">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="Modal5">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Modifier le mot de passe</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                 <div class="modal-body">
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-4 col-form-label">Mote de passe actuel</label>
+                     <div class="col-8">
+                      <input type="password" class="form-control" id="inputpasswordh" placeholder="Mot de passe" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" autofocus="autofocus" required="required" title="SVP ! étulisez l'alphabet miniscule et majiscule et les chiffres de cette format Mj/Mn/ch"/> 
+                     </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-4 col-form-label">Nouveau Mot de passe</label>
+                     <div class="col-8">
+                      <input type="password" class="form-control" id="password" placeholder="Nouveau Mot de passe" name="new_password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" autofocus="autofocus" required="required" title="SVP ! étulisez l'alphabet miniscule et majiscule et les chiffres de cette format Mj/Mn/ch"/> 
+                     </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-4 col-form-label">Confirmation Nouveau Mot de passe</label>
+                     <div class="col-8">
+                      <input type="password" class="form-control" id="inputpasswordh" placeholder="Confirmation Nouveau Mot de passe" oninput="check(this)" name="conf_password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" autofocus="autofocus" required="required" title="SVP ! étulisez l'alphabet miniscule et majiscule et les chiffres de cette format Mj/Mn/ch"/> 
+                     </div>
+                  </div>
+                 </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Valider</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>          
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>               
+  
+  
+  
+<!--     modifier les informations personelles / dzOffre / Bend Bens UHBC 2019 .    -->
+
+  
+
+ <div class="myForm">
+    <form th:action="@{/modifier}" th:method="PUT">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+             id="Modal4">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Modifier les informations personnelles</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                 <div class="modal-body">
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label">Nom</label>
+                     <div class="col-10">
+                      <input type="text" class="form-control" id="inputpasswordh" placeholder="Nouveau Nom" name="nom" th:value="${user.nom}"/> </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label">Prenom</label>
+                     <div class="col-10">
+                      <input type="text" class="form-control" id="inputpasswordh" placeholder="Nouveau Prenom" name="prenom" th:value="${user.prenom}"/> </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label">Date de naissance</label>
+                     <div class="col-10">
+                      <input type="date" class="form-control" id="inputpasswordh" name="date_naissance" th:value="${date}" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" max="2001-12-31" min="1940-12-31" /> </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label">Entreprise</label>
+                     <div class="col-10">
+                      <input type="text" class="form-control" id="inputpasswordh" placeholder="Entreprise" name="entreprise" th:value="${user.entreprise}"/> </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label">Telephone</label>
+                     <div class="col-10">
+                      <input type="tel" class="form-control" id="inputpasswordh" name="telephone" th:value="${user.telephone}" pattern = '[0-9]{10}' maxlength="10"/> </div>
+                  </div>
+                  <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label">Catégorie</label>
+                     <div class="col-10">
+                        <select class="custom-select" name="ctg" th:value="${user.ctg}">
+                  <option th:text="${user.ctg}"></option>
+                  <option>Aéronautique</option>
+                  <option>Agriculture, Elevage, Forêts et Pêche</option>
+                  <option>Agro alimentaire</option>
+                  <option>Ameublement et Mobilier</option>
+                  <option>Architecture et Urbanisme</option>
+                  <option>Assurance et Banque</option>
+                  <option>Bâtiment et Génie civil</option>
+                  <option>Chimie, Pétrochimie, Energie et Service pétrolier</option>
+                  <option>Equipement industriel, Outillage et Pièce détachée</option>
+                  <option>Restauration, Hôtellerie, Equipement pour les collectivités et villes</option>
+                  <option>Etudes, Consulting, Formation et Certification</option>
+                  <option>Hydraulique et Environnement</option>
+                  <option>Immobilier</option>
+                  <option>Impression, Edition et Communication</option>
+                  <option>Industrie de la cellulose, Papier, Carton et Emballage</option>
+                  <option>Industrie manufacturière</option>
+                  <option>Industrie sidérurgique, Métallurgique et Mécanique</option>
+                  <option>Informatique et Bureautique</option>
+                  <option>Médical et Paramédical</option>
+                  <option>Mine, Cimenterie, Agrégat et Granulat</option>
+                  <option>Pharmacie et Parapharmacie</option>
+                  <option>Port et Aéroport</option>
+                  <option>Sécurité et HSE</option>
+                  <option>Service</option>
+                  <option>Sport et Loisirs</option>
+                  <option>Equipement scientifique et Laboratoire</option>
+                  <option>Télécommunication</option>
+                  <option>Transport</option>
+                  <option>Travaux publics</option>
+                  <option>Industrie électronique et Matériel audio-visuel</option>
+                  <option>Autre</option>
+                        </select>
+                     </div>
+                  </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Valider</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+          
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>               
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+
+                  <!--     DzOffre / Bend Bens UHBC 2019 .    -->

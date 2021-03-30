@@ -1,0 +1,14 @@
+@charset "UTF-8";
+input:valid {
+   box-shadow: 0 0 2px 1px green;
+}
+input:invalid {
+   box-shadow: 0 0 2px 1px red;
+   
+}
+.red{
+	color: red;
+}
+.green{
+	color: green;
+}
